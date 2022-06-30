@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Memory Mistress</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="main">
+
+<div class="row">
+	<h2 class="center my-40">Memory Mistress</h2>
+			<div class="center">
+				<div id="settings" class="flex">
+					<div class="input-container">
+						<label for="level">Wybierz poziom</label>
+						<select id="level" class="mb-40">
+							<option value="easy">Podstawowy</option>
+							<option value="medium" selected>Średniozaawansowany</option>
+						</select>
+					</div>
+					<div class="input-container" id="category-select">
+
+					</div>
+				</div>
+				<div class="start">
+					<button id="start" class="my-20 round print-hide">START</button>
+				</div>
+				<div class="game hide" id="game">
+					<div id="title" class="mb-40"></div>
+					<div id="question"></div>
+					<input class="my-20" id="translation" value=""></input>
+					<div id="answer"></div>
+					<span class="my-20" id="grade"></span>
+					<div class="navigation center">
+						<button id="next" class="my-20 print-hide">DALEJ</button>
+					</div>
+					<div class="navigation center">
+						<button id="exit-game" class="my-20 secondary print-hide">ZAKOŃCZ</button>
+						<!--<button class="my-20 print-hide" onclick="sprawdz()">SPRAWDŹ</button>-->
+					</div>
+				</div>
+			</div>	
+</div>
+
+<div id="preview" class="hide">
+</div>
+<div class="cell-full">
+</div>
+<script src="words.js"></script>
+<script src="script.js"></script>
+</div>
+</body>
+</html>
+
