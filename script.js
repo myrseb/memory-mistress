@@ -113,7 +113,7 @@ const printWord = () => {
 	let question = getRandomWord();
 	_("question").innerHTML = question.pl;
 	_("answer").innerHTML = question.en;
-	_("title").innerHTML = "Pytanie " + (answers.length + 1) + "/" + answerCount;
+	_("title").innerHTML = "Słowo " + (answers.length + 1) + "/" + answerCount;
 	_("translation").value = "";
 	_("translation").focus();
 }
@@ -124,13 +124,11 @@ const nextWord = () => {
 
 	let answer = {"question" : _("question").innerHTML, "odpowiedź" : _("translation").value, "prawidłowa" : _("answer").innerHTML, "wynik" : grade}
 	answers.push(answer);
-	
+
 	if (answers.length < answerCount) {
-		console.log(answers.length)
 		printWord();
 	}
 	else {
-		console.log("koniec")
 		showSummary();
 		hideElement("next");
 		hideElement("exit-game");
@@ -188,7 +186,7 @@ function summaryDetails(){
 	${summaryInfo}
 		</tr></table>
 		<button id="restart" class="my-40 mr-20 print-hide">ZAGRAJ JESZCZE RAZ</button>
-		<button id="end-game" class="my-40 mr-20 print-hide">ZAGRAJ W INNEJ KATEGORI</button>
+		<button id="end-game" class="my-40 mr-20 print-hide">ZAGRAJ W INNEJ KATEGORII</button>
 		<button id="finish-game" class="my-40 secondary print-hide">ZAKOŃCZ GRĘ</button>
 	</div>
 	`;
