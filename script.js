@@ -65,6 +65,9 @@ const setWordCategory = (newValue) => {
 }
 
 const getRandomWord = () => {
+	wordsForChosenCategory = wordsForChosenCategory.length > 1 
+	? wordsForChosenCategory 
+	: chosenWords.filter((item => item.category === chosenCategory));
 	let randomNumber = Math.floor(Math.random() * wordsForChosenCategory.length);
 	let randomWord = wordsForChosenCategory[randomNumber];
 	wordsForChosenCategory.splice(randomNumber, 1);
@@ -74,10 +77,10 @@ const getRandomWord = () => {
 const getRandomEvaluation = (wynik) => {
 	let bazaOcen;
 	if(wynik===1) {
-		bazaOcen = ["Super", "Doskonale", "Znakomicie"];
+		bazaOcen = ["Super", "Doskonale", "Znakomicie", "Jesteś świetna", "Wymiatasz"];
 	}
 	else if (wynik===2){
-		bazaOcen = ["Całkiem dobrze", "Nieźle", "OK"];
+		bazaOcen = ["Całkiem dobrze", "Nieźle Ci idzie", "Jest OK"];
 	}
 	else {bazaOcen = ["Spróbuj jeszcze raz", "Ups. Nie jest najlepiej", "Musisz jeszcze poćwiczyć"];}
 	let randomNumber = Math.floor(Math.random() * bazaOcen.length);
@@ -111,8 +114,8 @@ const logToHistory = () => {
 
 const printWord = () => {
 	let question = getRandomWord();
-	_("question").innerHTML = question.pl;
-	_("answer").innerHTML = question.en;
+	_("question").innerHTML = question ? question.pl : "koniec słówek (zmień kategorię)";
+	_("answer").innerHTML = question ? question.en : "end of words (change category)";
 	_("title").innerHTML = "Słowo " + (answers.length + 1) + "/" + answerCount;
 	_("translation").value = "";
 	_("translation").focus();
