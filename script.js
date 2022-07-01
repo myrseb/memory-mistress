@@ -185,12 +185,14 @@ function summaryDetails(){
 		<h2 id='summary-title' class='center mb-20'>Podsumowanie wyników</h2>
 	</div>
 	<div class="summary-content">
-		<table><tr><th>Lp</th><th>Słowo</th><th>Tłumaczenie</th><th>Twoja odpowiedź</th><th>Punkty</th></tr>
-	${summaryInfo}
-		</tr></table>
-		<button id="restart" class="my-40 mr-20 print-hide">ZAGRAJ JESZCZE RAZ</button>
-		<button id="end-game" class="my-40 mr-20 print-hide">ZAGRAJ W INNEJ KATEGORII</button>
-		<button id="finish-game" class="my-40 secondary print-hide">ZAKOŃCZ GRĘ</button>
+		<div class="table-container">
+			<table><tr><th>Lp</th><th>Słowo</th><th>Tłumaczenie</th><th>Twoja odpowiedź</th><th>Punkty</th></tr>
+				${summaryInfo}
+			</tr></table>
+		</div>
+		<button id="restart" class="mr-20 print-hide">ZAGRAJ JESZCZE RAZ</button>
+		<button id="end-game" class="mr-20 print-hide">ZAGRAJ W INNEJ KATEGORII</button>
+		<button id="finish-game" class="secondary print-hide">ZAKOŃCZ GRĘ</button>
 	</div>
 	`;
 	
