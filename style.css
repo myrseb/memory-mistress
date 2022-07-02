@@ -224,6 +224,7 @@ label span {
 
 #title {
 	font-size: 28px;
+	clear: both;
 }
 
 #question {
@@ -366,15 +367,18 @@ th {
 	.input-container {
 		padding: 0px;
 		width: 100%;
+		clear: both;
 	}
 
 	.flex {
 		display: block;
 	}
+
 	#preview {
 		width: 100%;
 		left: 0px;
 	}
+	
 	.table-container {
 		overflow: auto;
 	}
