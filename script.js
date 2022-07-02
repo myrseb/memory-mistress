@@ -122,11 +122,8 @@ const printWord = () => {
 }
 
 const nextWord = () => {
-	
-	let grade = checkIfAnswerIsCorrect() ? 1 : 0;
 
-	let answer = {"question" : _("question").innerHTML, "odpowiedź" : _("translation").value, "prawidłowa" : _("answer").innerHTML, "wynik" : grade}
-	answers.push(answer);
+	addAnswerToSessionAnswers();
 
 	if (answers.length < answerCount) {
 		printWord();
@@ -138,47 +135,64 @@ const nextWord = () => {
 	}
 }
 
+const addAnswerToSessionAnswers = () => {
+	let grade = checkIfAnswerIsCorrect() ? 1 : 0;
+	let answer = {"question" : _("question").innerHTML, "odpowiedź" : _("translation").value, "prawidłowa" : _("answer").innerHTML, "wynik" : grade}
+	answers.push(answer);
+}
+
 const checkIfAnswerIsCorrect = () => {
 	return _("answer").innerHTML.toLowerCase() === _("translation").value.toLowerCase();
 }
 
-function showSummary(){
+const showSummary = () => {
 	let summary;
-	let points = 0;
-	let grade;
-	answers.forEach(function(item, index, array) {
-		points += item.wynik;
-	})
-	let color;
-	if (Math.floor(points*100)>=Math.floor(answerCount * 0.7*100)){
-		color = "green";
-		grade = getRandomEvaluation(1);
-	}
-	else if ((Math.floor(points*100)<Math.floor(answerCount * 0.7*100)) && (Math.floor(points*100)>=Math.floor(answerCount * 0.45*100))){
-		color = "orange";
-		grade = getRandomEvaluation(2);
-	}
-	else {
-		color = "red";
-		grade = getRandomEvaluation(3);
-	}
-	summary="<p class='" + color + "'>" + grade + ". Twój wynik to " + points + "/" +answers.length+" ("+ Math.floor(points/answers.length * 100) + "%)</p>";
-	summary+='<button id="details" class="my-20 print-hide">POKAŻ WYNIKI SZCZEGÓŁOWE</button>';
+	let points = calculatePoints();
+	let percentageResult = calculatePercentageOfCorrectAnswers(points);
+	let grade = isVeryGoodResult(points) ? getRandomEvaluation(1)
+	: isGoodResult(points) ? getRandomEvaluation(2) 
+	: getRandomEvaluation(3);
+	
+	let color = isVeryGoodResult(points) ? "green"
+	: isGoodResult(points) ? "orange" 
+	: "red";
+
+	summary = `<p class="${ color }">${ grade }. Twój wynik to ${ points }/${ answers.length } (${ percentageResult }%)</p>
+	<button id="details" class="my-20 print-hide">POKAŻ WYNIKI SZCZEGÓŁOWE</button>`;
 	
 	_("grade").innerHTML = summary
     _("details").addEventListener('click', summaryDetails)
 }
 
-function summaryDetails(){
+const calculatePoints = () => {
+	let points = 0;
+	answers.forEach(function(item) {
+		points += item.wynik;
+	})
+	return points;
+}
+
+const calculatePercentageOfCorrectAnswers = (points) => {
+	return Math.floor(points / answers.length * 100)
+}
+
+const isVeryGoodResult = (points) => {
+	return Math.floor(points * 100) >= Math.floor(answerCount * 0.7 * 100);
+}
+
+const isGoodResult = (points) => {
+	return Math.floor(points * 100) < Math.floor(answerCount * 0.7 * 100) && Math.floor(points * 100) >= Math.floor(answerCount * 0.45 * 100);
+}
+
+const summaryDetails = () => {
 	let colorClass;
 	let points = 0;
-	let level = _("level").value;
 	let summaryInfo = '';
-	answers.forEach(function(item, index, array) {
-		points+=item.wynik;
-		if (item.wynik===0) {colorClass=' class="red"'}
-		else {colorClass=' class="green"'}
-		summaryInfo+=`<tr><td>${(index+1)}</td><td>${item.question}</td><td>${item.prawidłowa}</td><td${colorClass}>${item.odpowiedź}</td><td>${item.wynik}</td></tr>`;
+	answers.forEach(function(item, index) {
+		points += item.wynik;
+		if (item.wynik === 0) {colorClass =' class="red"'}
+		else {colorClass = ' class="green"'}
+		summaryInfo += `<tr><td>${(index + 1)}</td><td>${item.question}</td><td>${item.prawidłowa}</td><td${colorClass}>${item.odpowiedź}</td><td>${item.wynik}</td></tr>`;
 	})
 	let summary = `
 	<div class="summary-header">
@@ -208,12 +222,10 @@ function summaryDetails(){
 
 const restartLearningSession = () => {
 	answers.length = 0;
-	_("preview").innerHTML = '';
 	_("grade").innerHTML = '';
 	hideElement("preview");
 	showElement("next");
 	showElement("exit-game");
-	_("translation").value = '';
 	printWord();
 }
 
