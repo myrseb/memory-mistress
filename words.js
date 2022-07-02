@@ -793,7 +793,7 @@ wordsEasy = [
 {"pl": "fioletowy", "en": "purple/violet", "category": "Colors"},
 {"pl": "czerwony", "en": "red", "category": "Colors"},
 {"pl": "srebrny", "en": "silver", "category": "Colors"},
-{"pl": "hite - śnieżnobiały", "en": "sno", "category": "Colors"},
+{"pl": "śnieżnobiały", "en": "snow-white", "category": "Colors"},
 {"pl": "biały", "en": "white", "category": "Colors"},
 {"pl": "żółty", "en": "yellow", "category": "Colors"},
 

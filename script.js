@@ -3,7 +3,7 @@ categories = [];
 chosenCategory = "Człowiek";
 chosenWords = words;
 answers=[];
-answerCount = 10;
+answerCount = 20;
 sessionHistory = [];
 
 function _(el){
@@ -62,7 +62,7 @@ const setWordCategory = (newValue) => {
 }
 
 const getRandomWord = () => {
-	wordsForChosenCategory = wordsForChosenCategory.length > 1 
+	wordsForChosenCategory = wordsForChosenCategory.length > 0 
 	? wordsForChosenCategory 
 	: chosenWords.filter((item => item.category === chosenCategory));
 	let randomNumber = Math.floor(Math.random() * wordsForChosenCategory.length);
@@ -230,6 +230,7 @@ const restartLearningSession = () => {
 	answers.length = 0;
 	_("evaluation").innerHTML = '';
 	hideElement("summary-details");
+	showElement("game");
 	showElement("next");
 	showElement("exit-game");
 	printWord();
