@@ -28,6 +28,7 @@ const changeLevel = () => {
     getCategoriesForLevel();
     renderCategorySelect();
     setWordCategory(chosenCategory);
+	changeWordCategory();
 	printWord();
 	
 }
@@ -247,5 +248,5 @@ setWordCategory(chosenCategory);
 changeWordCategory();
 _("start").addEventListener('click', startGame);
 _("next").addEventListener('click', nextWord);
-_("level").addEventListener('click', changeLevel);
+_("level").addEventListener('change', changeLevel);
 _("exit-game").addEventListener('click', endGame);
