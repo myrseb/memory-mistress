@@ -14,7 +14,7 @@
 <div class="main">
 
 <div class="row">
-			<div class="center">
+			<div class="center flex-columns">
 				<div id="settings" class="flex">
 					<div class="input-container">
 						<label for="level">Wybierz poziom</label>
@@ -35,7 +35,6 @@
 					<div id="question"></div>
 					<input class="my-20" id="translation" value=""></input>
 					<div id="answer"></div>
-					<span class="my-20" id="evaluation"></span>
 					<div class="navigation center">
 						<button id="next" class="print-hide">DALEJ</button>
 					</div>
@@ -44,10 +43,12 @@
 						<!--<button class="my-20 print-hide" onclick="sprawdz()">SPRAWDŹ</button>-->
 					</div>
 				</div>
+				<div class="my-40" id="evaluation">
+				</div>
 			</div>	
 </div>
 
-<div id="preview" class="hide">
+<div id="summary-details" class="hide">
 </div>
 <div class="cell-full">
 </div>

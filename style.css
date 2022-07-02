@@ -115,6 +115,13 @@ input [type=checkbox]{
     display: flex;
 }
 
+.flex-columns {
+    display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
 .input-container{
     padding: 20px;
     width: 50%;
@@ -236,7 +243,7 @@ label span {
 	height: 2px;
 }
 
-#preview {
+#summary-details {
 	position:absolute;
 	width: 900px;
 	margin: 0 auto;
@@ -342,11 +349,11 @@ th {
 		visibility:hidden;
 	}
 
-	#preview, #preview *   {
+	#summary-details, #summary-details *   {
 		visibility:visible;
 	}
 
-	#preview {
+	#summary-details {
 		border: 0px solid #fff;
 	}
 
@@ -374,11 +381,11 @@ th {
 		display: block;
 	}
 
-	#preview {
+	#summary-details {
 		width: 100%;
 		left: 0px;
 	}
-	
+
 	.table-container {
 		overflow: auto;
 	}

@@ -4,6 +4,7 @@ chosenCategory = "Człowiek";
 chosenWords = words;
 answers=[];
 answerCount = 10;
+sessionHistory = [];
 
 function _(el){
 	return document.getElementById(el);
@@ -90,7 +91,7 @@ const startGame = () => {
 const endGame = () => {
 	restartLearningSession();
 	hideElement("game");
-	hideElement("preview");
+	hideElement("summary-details");
 	showElement("start");
 	showElement("settings");
 }
@@ -124,12 +125,13 @@ const nextWord = () => {
 		showSummary();
 		hideElement("next");
 		hideElement("exit-game");
+		hideElement("game");
 	}
 }
 
 const addAnswerToSessionAnswers = () => {
-	let grade = checkIfAnswerIsCorrect() ? 1 : 0;
-	let answer = {"question" : _("question").innerHTML, "odpowiedź" : _("translation").value, "prawidłowa" : _("answer").innerHTML, "wynik" : grade}
+	let result = checkIfAnswerIsCorrect() ? 1 : 0;
+	let answer = {"question" : _("question").innerHTML, "answer" : _("translation").value, "correct" : _("answer").innerHTML, "result" : result}
 	answers.push(answer);
 }
 
@@ -156,13 +158,13 @@ const showSummary = () => {
 	<button id="details" class="my-20 print-hide">POKAŻ WYNIKI SZCZEGÓŁOWE</button>`;
 	
 	_("evaluation").innerHTML = summary
-    _("details").addEventListener('click', summaryDetails)
+    _("details").addEventListener('click', showSummaryDetails)
 }
 
 const calculatePoints = () => {
 	let points = 0;
 	answers.forEach(function(item) {
-		points += item.wynik;
+		points += item.result;
 	})
 	return points;
 }
@@ -179,17 +181,25 @@ const isGoodResult = (points) => {
 	return Math.floor(points * 100) < Math.floor(answerCount * 0.7 * 100) && Math.floor(points * 100) >= Math.floor(answerCount * 0.45 * 100);
 }
 
-const summaryDetails = () => {
-	let colorClass;
-	let points = 0;
+const showSummaryDetails = () => {
+	let points = calculatePoints();
+	
+	
+	_("summary-details").innerHTML = renderSummaryDetails();
+	showElement("summary-details");
+	_("summary-title").innerHTML = 'Podsumowanie wyników '+ points + "/" + answerCount +" ("+ Math.floor(points/answers.length * 100) + "%)";
+	hideElement("details");
+    _("restart").addEventListener('click', restartLearningSession);
+	_("end-game").addEventListener('click', endGame);
+	_("finish-game").addEventListener('click', finishGameAndLogToHistory);
+}
+
+const renderSummaryDetails = () => {
 	let summaryInfo = '';
-	answers.forEach(function(item, index) {
-		points += item.wynik;
-		if (item.wynik === 0) {colorClass =' class="red"'}
-		else {colorClass = ' class="green"'}
-		summaryInfo += `<tr><td>${(index + 1)}</td><td>${item.question}</td><td>${item.prawidłowa}</td><td${colorClass}>${item.odpowiedź}</td><td>${item.wynik}</td></tr>`;
+	answers.forEach(function(answer, index) {
+		summaryInfo += generateOneRowForDetailsInfo(answer, index);
 	})
-	let summary = `
+	return `
 	<div class="summary-header">
 		<h2 id='summary-title' class='center mb-20'>Podsumowanie wyników</h2>
 	</div>
@@ -204,21 +214,23 @@ const summaryDetails = () => {
 		<button id="finish-game" class="secondary print-hide">ZAKOŃCZ GRĘ</button>
 	</div>
 	`;
-	
-	//let color = points > Math.floor(answerCount * 0.65) ? "green" : "red";
-	_("preview").innerHTML = summary;
-	showElement("preview");
-	_("summary-title").innerHTML = 'Podsumowanie wyników '+ points + "/" + answerCount +" ("+ Math.floor(points/answers.length * 100) + "%)";
-	hideElement("details");
-    _("restart").addEventListener('click', restartLearningSession);
-	_("end-game").addEventListener('click', endGame);
-	_("finish-game").addEventListener('click', finishGameAndLogToHistory);
+}
+
+const generateOneRowForDetailsInfo = (answer, index) => {
+	let	colorClass = answer.result === 0 ? ' class="red"' : ' class="green"';
+	return `<tr>
+				<td>${ index + 1 }</td>
+				<td>${ answer.question }</td>
+				<td>${ answer.correct }</td>
+				<td${ colorClass }>${ answer.answer }</td>
+				<td${ colorClass }>${ answer.result }</td>
+			</tr>`;
 }
 
 const restartLearningSession = () => {
 	answers.length = 0;
 	_("evaluation").innerHTML = '';
-	hideElement("preview");
+	hideElement("summary-details");
 	showElement("next");
 	showElement("exit-game");
 	printWord();
