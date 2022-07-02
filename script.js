@@ -21,7 +21,7 @@ const showElement = (elementId) => {
 const changeLevel = () => {
 	if (_("level").value === "easy") {
 		chosenWords = wordsEasy;
-        chosenCategory = 'FAMILY';
+        chosenCategory = 'Family';
 	} else {
 		chosenWords = words;
         chosenCategory = 'Człowiek';
@@ -43,7 +43,6 @@ const renderCategorySelect = () => {
     _("category-select").innerHTML =
     `<label for="category">Wybierz kategorię</label>
     <select id="category" class="mb-40">
-        <option selected disabled value="0">Wybierz kategorię</option>
         ${categoryItems}
     </select>`;
     _("category").addEventListener('click', changeWordCategory);
