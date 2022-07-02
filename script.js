@@ -47,10 +47,6 @@ const renderCategorySelect = () => {
     _("category").addEventListener('click', changeWordCategory);
 }
 
-const renderCategorySelectOptions = () => {
-    return 
-}
-
 const changeWordCategory = () => {
     chosenCategory = getWordCategory();
     wordsForChosenCategory = chosenWords.filter((item => item.category === chosenCategory));
@@ -74,18 +70,13 @@ const getRandomWord = () => {
 	return randomWord;
 }
 
-const getRandomEvaluation = (wynik) => {
-	let bazaOcen;
-	if(wynik===1) {
-		bazaOcen = ["Super", "Doskonale", "Znakomicie", "Jesteś świetna", "Wymiatasz"];
-	}
-	else if (wynik===2){
-		bazaOcen = ["Całkiem dobrze", "Nieźle Ci idzie", "Jest OK"];
-	}
-	else {bazaOcen = ["Spróbuj jeszcze raz", "Ups. Nie jest najlepiej", "Musisz jeszcze poćwiczyć"];}
-	let randomNumber = Math.floor(Math.random() * bazaOcen.length);
-	let grade = bazaOcen[randomNumber];
-	return grade;
+const getRandomEvaluation = (result) => {
+	let evaluations = result === 1 ? ["Super", "Doskonale", "Znakomicie", "Jesteś świetna", "Wymiatasz"]
+	: result === 2 ? ["Całkiem dobrze", "Nieźle Ci idzie", "Jest OK"]
+	: ["Spróbuj jeszcze raz", "Ups. Nie jest najlepiej", "Musisz jeszcze poćwiczyć"];
+
+	let randomNumber = Math.floor(Math.random() * evaluations.length);
+	return evaluations[randomNumber];
 }
 
 const startGame = () => {
@@ -149,18 +140,21 @@ const showSummary = () => {
 	let summary;
 	let points = calculatePoints();
 	let percentageResult = calculatePercentageOfCorrectAnswers(points);
-	let grade = isVeryGoodResult(points) ? getRandomEvaluation(1)
-	: isGoodResult(points) ? getRandomEvaluation(2) 
-	: getRandomEvaluation(3);
+	let result = isVeryGoodResult(points) ? 1
+	: isGoodResult(points) ? 2 
+	: 3;
+
+	let evaluation = getRandomEvaluation(result);
 	
 	let color = isVeryGoodResult(points) ? "green"
 	: isGoodResult(points) ? "orange" 
 	: "red";
 
-	summary = `<p class="${ color }">${ grade }. Twój wynik to ${ points }/${ answers.length } (${ percentageResult }%)</p>
+	summary = `<p class="${ color }">${ evaluation }. </p>
+	<p class="${ color }">Twój wynik to ${ points }/${ answers.length } (${ percentageResult }%)</p>
 	<button id="details" class="my-20 print-hide">POKAŻ WYNIKI SZCZEGÓŁOWE</button>`;
 	
-	_("grade").innerHTML = summary
+	_("evaluation").innerHTML = summary
     _("details").addEventListener('click', summaryDetails)
 }
 
@@ -222,7 +216,7 @@ const summaryDetails = () => {
 
 const restartLearningSession = () => {
 	answers.length = 0;
-	_("grade").innerHTML = '';
+	_("evaluation").innerHTML = '';
 	hideElement("preview");
 	showElement("next");
 	showElement("exit-game");
