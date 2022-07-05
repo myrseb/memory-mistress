@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
   <title>Memory Mistress</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -19,16 +20,21 @@
 					<div class="input-container">
 						<label for="level">Wybierz poziom</label>
 						<select id="level" class="mb-40">
-							<option value="easy">Podstawowy</option>
-							<option value="medium" selected>Średniozaawansowany</option>
+							<option value="Easy">Easy</option>
+							<option value="Medium" selected>Medium</option>
 						</select>
 					</div>
 					<div class="input-container" id="category-select">
 
 					</div>
 				</div>
-				<div class="start">
-					<button id="start" class="round print-hide">START</button>
+				<div id="start-navigation">
+					<div>
+						<button id="start" class="round print-hide">START</button>
+					</div>
+					<div>
+						<button id="show-history" class="my-40 print-hide">HISTORIA</button>
+					</div>
 				</div>
 				<div class="game hide" id="game">
 					<div id="title" class="mb-40"></div>

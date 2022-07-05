@@ -1,9 +1,9 @@
-chosenLevel = "medium";
+chosenLevel = "Medium";
 categories = [];
 chosenCategory = "Człowiek";
 chosenWords = words;
-answers=[];
-answerCount = 20;
+answers = [];
+answerCount = 5;
 sessionHistory = [];
 
 function _(el){
@@ -19,7 +19,8 @@ const showElement = (elementId) => {
 }
 
 const changeLevel = () => {
-	if (_("level").value === "easy") {
+	chosenLevel = _("level").value;
+	if (_("level").value === "Easy") {
 		chosenWords = wordsEasy;
         chosenCategory = 'Family';
 	} else {
@@ -82,7 +83,7 @@ const getRandomEvaluation = (result) => {
 
 const startGame = () => {
     showElement("game");
-    hideElement("start");
+    hideElement("start-navigation");
 	hideElement("settings");
     printWord();
 }
@@ -91,7 +92,7 @@ const endGame = () => {
 	restartLearningSession();
 	hideElement("game");
 	hideElement("summary-details");
-	showElement("start");
+	showElement("start-navigation");
 	showElement("settings");
 }
 
@@ -101,7 +102,11 @@ const finishGameAndLogToHistory = () => {
 }
 
 const logToHistory = () => {
-	console.log("tu logi");
+	let historyFromStorage = getFromLocalStorage('history');
+	let history = historyFromStorage > 0 ? JSON.parse(historyFromStorage) : {"history" : []};
+	console.log(history)
+	let newHistory = history && history.history && history.history.length > 0 ? {"history" : [...history.history, ...sessionHistory]} : { "history": sessionHistory };
+	saveToLocalStorage('history', JSON.stringify(newHistory));
 }
 
 const printWord = () => {
@@ -158,6 +163,9 @@ const showSummary = () => {
 	
 	_("evaluation").innerHTML = summary
     _("details").addEventListener('click', showSummaryDetails)
+
+	sessionHistory.push({"date": new Date(), "level": chosenLevel, "category": chosenCategory, "points": points})
+	console.log(sessionHistory)
 }
 
 const calculatePoints = () => {
@@ -169,7 +177,7 @@ const calculatePoints = () => {
 }
 
 const calculatePercentageOfCorrectAnswers = (points) => {
-	return Math.floor(points / answers.length * 100)
+	return Math.floor(points / answerCount * 100)
 }
 
 const isVeryGoodResult = (points) => {
@@ -226,6 +234,61 @@ const generateOneRowForDetailsInfo = (answer, index) => {
 			</tr>`;
 }
 
+const showHistory = () => {
+	_("summary-details").innerHTML = renderHistory();
+	showElement("summary-details");
+	_("end-game").addEventListener('click', endGame);
+	_("remove-history").addEventListener('click', removeHistory);
+}
+
+const renderHistory = () => {
+	let historyFromStorage = getFromLocalStorage('history');
+	let history = historyFromStorage ? JSON.parse(historyFromStorage) : {"history" : []}
+	let historyRecords = '';
+	//console.log(historyFromStorage, history, historyFromStorage.length)
+	history.history.reverse();
+	history.history.forEach(function(historyRecord, index) {
+		historyRecords += generateOneRowForHistory(historyRecord, index);
+	})
+	let historyInfo = history.history.length > 0 ? `<table><tr><th>Lp</th><th>Poziom</th><th>Kategoria</th><th>Wynik</th><th>Data</th></tr>
+	${historyRecords}
+	</tr></table>` :
+	'<p class="my-40">Brak wpisów w historii</p>';
+	return `
+	<div class="summary-header">
+		<h2 id='summary-title' class='center mb-20'>Historia wyników</h2>
+	</div>
+	<div class="summary-content flex-columns">
+		<div class="table-container">
+				${historyInfo}	
+		</div>
+		<div class="navigation">	
+			<button id="end-game" class="mr-20 print-hide">ZAMKNIJ</button>
+			<button id="remove-history" class="invert mr-20 print-hide">WYCZYŚĆ HISTORIĘ</button>
+		</div>
+	</div>
+	`;
+}
+
+const generateOneRowForHistory = (historyRecord, index) => {
+	let	colorClass = isVeryGoodResult(historyRecord.points) ? ' class="green"' 
+	: isGoodResult(historyRecord.points) ? ' class="orange"'
+	: ' class="red"';
+
+	return `<tr>
+				<td>${ index + 1 }</td>
+				<td>${ historyRecord.level }</td>
+				<td>${ historyRecord.category }</td>
+				<td${ colorClass }>${ calculatePercentageOfCorrectAnswers(historyRecord.points)+'%' }</td>
+				<td>${ new Date(historyRecord.date).toLocaleString() }</td>
+			</tr>`;
+}
+
+const removeHistory = () => {
+	removeFromLocalStorage('history');
+	endGame();
+}
+
 const restartLearningSession = () => {
 	answers.length = 0;
 	_("evaluation").innerHTML = '';
@@ -234,6 +297,18 @@ const restartLearningSession = () => {
 	showElement("next");
 	showElement("exit-game");
 	printWord();
+}
+
+const getFromLocalStorage = (key) => {
+	return localStorage.getItem(key);
+}
+
+const saveToLocalStorage = (key, value) => {
+    localStorage.setItem(key, value);
+}
+
+const removeFromLocalStorage = (key) => {
+	localStorage.removeItem(key);
 }
 
 
@@ -256,9 +331,10 @@ input.addEventListener("keyup", function(event) {
 
 getCategoriesForLevel();
 renderCategorySelect();
-setWordCategory(chosenCategory);
-changeWordCategory();
+changeLevel();
 _("start").addEventListener('click', startGame);
 _("next").addEventListener('click', nextWord);
 _("level").addEventListener('change', changeLevel);
 _("exit-game").addEventListener('click', endGame);
+_("show-history").addEventListener('click', showHistory);
+
