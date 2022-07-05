@@ -115,6 +115,13 @@ input [type=checkbox]{
     display: flex;
 }
 
+.flex-columns {
+    display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
 .input-container{
     padding: 20px;
     width: 50%;
@@ -132,9 +139,15 @@ button, .navigation a {
 	text-decoration: none;
 	cursor: pointer;
 	border-radius: 3px;
-	border: 0px solid var(--primary-color);
+	border: 1px solid var(--primary-color);
 	min-width: 180px;
 	margin: 20px auto 0 auto;
+}
+
+button.invert {
+	background-color: #fff;
+	color: var(--primary-color);
+	border: 1px solid var(--primary-color);
 }
 
 button:disabled {
@@ -144,6 +157,7 @@ button:disabled {
 
 .secondary {
 	background-color: #888;
+	border: 1px solid #888;
 }
 
 .round {
@@ -152,6 +166,7 @@ button:disabled {
     border-radius: 50%;
     font-size: 30px;
 	padding: 0;
+	margin: 0;
 }
 
 .cancel {
@@ -236,7 +251,7 @@ label span {
 	height: 2px;
 }
 
-#preview {
+#summary-details {
 	position:absolute;
 	width: 900px;
 	margin: 0 auto;
@@ -247,6 +262,7 @@ label span {
 	top: 0px;
 	font-size:18px;
 	box-shadow: #ddd 2px 2px 4px;
+	min-height: 450px;
 }
 
 .summary-header {
@@ -257,6 +273,11 @@ label span {
 
 .summary-content {
 	margin: 30px;
+}
+
+.table-container {
+	width: 100%;
+	margin: 40px auto
 }
 
 table {
@@ -342,11 +363,11 @@ th {
 		visibility:hidden;
 	}
 
-	#preview, #preview *   {
+	#summary-details, #summary-details *   {
 		visibility:visible;
 	}
 
-	#preview {
+	#summary-details {
 		border: 0px solid #fff;
 	}
 
@@ -356,6 +377,7 @@ th {
 }
 
 @media screen and (max-width: 768px) {
+	
 	.main {
 	  width: 95%;
 	}
@@ -374,11 +396,11 @@ th {
 		display: block;
 	}
 
-	#preview {
+	#summary-details {
 		width: 100%;
 		left: 0px;
 	}
-	
+
 	.table-container {
 		overflow: auto;
 	}

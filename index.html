@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
   <title>Memory Mistress</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -14,28 +15,32 @@
 <div class="main">
 
 <div class="row">
-			<div class="center">
+			<div class="center flex-columns">
 				<div id="settings" class="flex">
 					<div class="input-container">
 						<label for="level">Wybierz poziom</label>
 						<select id="level" class="mb-40">
-							<option value="easy">Podstawowy</option>
-							<option value="medium" selected>Średniozaawansowany</option>
+							<option value="Easy">Easy</option>
+							<option value="Medium" selected>Medium</option>
 						</select>
 					</div>
 					<div class="input-container" id="category-select">
 
 					</div>
 				</div>
-				<div class="start">
-					<button id="start" class="round print-hide">START</button>
+				<div id="start-navigation">
+					<div>
+						<button id="start" class="round print-hide">START</button>
+					</div>
+					<div>
+						<button id="show-history" class="my-40 print-hide">HISTORIA</button>
+					</div>
 				</div>
 				<div class="game hide" id="game">
 					<div id="title" class="mb-40"></div>
 					<div id="question"></div>
 					<input class="my-20" id="translation" value=""></input>
 					<div id="answer"></div>
-					<span class="my-20" id="grade"></span>
 					<div class="navigation center">
 						<button id="next" class="print-hide">DALEJ</button>
 					</div>
@@ -44,10 +49,12 @@
 						<!--<button class="my-20 print-hide" onclick="sprawdz()">SPRAWDŹ</button>-->
 					</div>
 				</div>
+				<div class="my-40" id="evaluation">
+				</div>
 			</div>	
 </div>
 
-<div id="preview" class="hide">
+<div id="summary-details" class="hide">
 </div>
 <div class="cell-full">
 </div>
