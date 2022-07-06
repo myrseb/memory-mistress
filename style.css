@@ -186,23 +186,23 @@ button:disabled {
 }
 
 .mx-20 {
-	margin:10px 20px 0 20px!important;
+	margin:auto 20px!important;
 }
 
 .my-20 {
-	margin: 20px 0!important;
+	margin: 20px auto!important;
 }
 
 .my-40 {
-	margin: 40px 0!important;
+	margin: 40px auto!important;
 }
 
 .mr-20{
-	margin-right:20px!important;
+	margin-right: 20px!important;
 }
 
 .mr-40{
-	margin: right 40px!important;
+	margin-right: 40px!important;
 }
 
 .mt-0{

@@ -3,7 +3,7 @@ categories = [];
 chosenCategory = "Człowiek";
 chosenWords = words;
 answers = [];
-answerCount = 5;
+answerCount = 20;
 sessionHistory = [];
 
 function _(el){
@@ -96,6 +96,16 @@ const endGame = () => {
 	showElement("settings");
 }
 
+const restartLearningSession = () => {
+	answers.length = 0;
+	_("evaluation").innerHTML = '';
+	hideElement("summary-details");
+	showElement("game");
+	showElement("next");
+	showElement("exit-game");
+	printWord();
+}
+
 const finishGameAndLogToHistory = () => {
 	endGame();
 	logToHistory();
@@ -103,7 +113,7 @@ const finishGameAndLogToHistory = () => {
 
 const logToHistory = () => {
 	let historyFromStorage = getFromLocalStorage('history');
-	let history = historyFromStorage > 0 ? JSON.parse(historyFromStorage) : {"history" : []};
+	let history = historyFromStorage ? JSON.parse(historyFromStorage) : {"history" : []};
 	console.log(history)
 	let newHistory = history && history.history && history.history.length > 0 ? {"history" : [...history.history, ...sessionHistory]} : { "history": sessionHistory };
 	saveToLocalStorage('history', JSON.stringify(newHistory));
@@ -127,6 +137,7 @@ const nextWord = () => {
 	}
 	else {
 		showSummary();
+		addGameInfoToSessionHistory();
 		hideElement("next");
 		hideElement("exit-game");
 		hideElement("game");
@@ -159,13 +170,17 @@ const showSummary = () => {
 
 	summary = `<p class="${ color }">${ evaluation }. </p>
 	<p class="${ color }">Twój wynik to ${ points }/${ answers.length } (${ percentageResult }%)</p>
-	<button id="details" class="my-20 print-hide">POKAŻ WYNIKI SZCZEGÓŁOWE</button>`;
+	<button id="details" class="mr-20 print-hide">POKAŻ WYNIKI SZCZEGÓŁOWE</button>
+	<button id="restart" class="mr-20 print-hide">ZAGRAJ JESZCZE RAZ</button>
+	<button id="end-game" class="mr-20 print-hide">ZAGRAJ W INNEJ KATEGORII</button>
+	<button id="finish-game" class="secondary print-hide">ZAKOŃCZ GRĘ</button>`;
 	
-	_("evaluation").innerHTML = summary
-    _("details").addEventListener('click', showSummaryDetails)
+	_("evaluation").innerHTML = summary;
+    _("details").addEventListener('click', showSummaryDetails);
+	_("restart").addEventListener('click', restartLearningSession);
+	_("end-game").addEventListener('click', endGame);
+	_("finish-game").addEventListener('click', finishGameAndLogToHistory);
 
-	sessionHistory.push({"date": new Date(), "level": chosenLevel, "category": chosenCategory, "points": points})
-	console.log(sessionHistory)
 }
 
 const calculatePoints = () => {
@@ -188,6 +203,11 @@ const isGoodResult = (points) => {
 	return Math.floor(points * 100) < Math.floor(answerCount * 0.7 * 100) && Math.floor(points * 100) >= Math.floor(answerCount * 0.45 * 100);
 }
 
+const addGameInfoToSessionHistory = () => {
+	let points = calculatePoints();
+	sessionHistory.push({"date": new Date(), "level": chosenLevel, "category": chosenCategory, "points": points})
+}
+
 const showSummaryDetails = () => {
 	let points = calculatePoints();
 	
@@ -196,9 +216,9 @@ const showSummaryDetails = () => {
 	showElement("summary-details");
 	_("summary-title").innerHTML = 'Podsumowanie wyników '+ points + "/" + answerCount +" ("+ Math.floor(points/answers.length * 100) + "%)";
 	hideElement("details");
-    _("restart").addEventListener('click', restartLearningSession);
-	_("end-game").addEventListener('click', endGame);
-	_("finish-game").addEventListener('click', finishGameAndLogToHistory);
+    _("_restart").addEventListener('click', restartLearningSession);
+	_("_end-game").addEventListener('click', endGame);
+	_("_finish-game").addEventListener('click', finishGameAndLogToHistory);
 }
 
 const renderSummaryDetails = () => {
@@ -216,9 +236,9 @@ const renderSummaryDetails = () => {
 				${summaryInfo}
 			</tr></table>
 		</div>
-		<button id="restart" class="mr-20 print-hide">ZAGRAJ JESZCZE RAZ</button>
-		<button id="end-game" class="mr-20 print-hide">ZAGRAJ W INNEJ KATEGORII</button>
-		<button id="finish-game" class="secondary print-hide">ZAKOŃCZ GRĘ</button>
+		<button id="_restart" class="mr-20 print-hide">ZAGRAJ JESZCZE RAZ</button>
+		<button id="_end-game" class="mr-20 print-hide">ZAGRAJ W INNEJ KATEGORII</button>
+		<button id="_finish-game" class="secondary print-hide">ZAKOŃCZ GRĘ</button>
 	</div>
 	`;
 }
@@ -263,8 +283,8 @@ const renderHistory = () => {
 				${historyInfo}	
 		</div>
 		<div class="navigation">	
-			<button id="end-game" class="mr-20 print-hide">ZAMKNIJ</button>
-			<button id="remove-history" class="invert mr-20 print-hide">WYCZYŚĆ HISTORIĘ</button>
+			<button id="end-game" class="mx-20 print-hide">ZAMKNIJ</button>
+			<button id="remove-history" class="invert mx-20 print-hide">WYCZYŚĆ HISTORIĘ</button>
 		</div>
 	</div>
 	`;
@@ -287,16 +307,6 @@ const generateOneRowForHistory = (historyRecord, index) => {
 const removeHistory = () => {
 	removeFromLocalStorage('history');
 	endGame();
-}
-
-const restartLearningSession = () => {
-	answers.length = 0;
-	_("evaluation").innerHTML = '';
-	hideElement("summary-details");
-	showElement("game");
-	showElement("next");
-	showElement("exit-game");
-	printWord();
 }
 
 const getFromLocalStorage = (key) => {
