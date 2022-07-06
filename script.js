@@ -21,10 +21,13 @@ const showElement = (elementId) => {
 
 const renderGreetings = () => {
 	let savedUser = getFromLocalStorage('userName');
-
+	let userHistory = getUserHistory(savedUser);
+	let lastGameDate = new Date(userHistory[0].date);
+	let comment = isVeryLongFromLastGame(lastGameDate) ? "Where have you been for so long? " : "I'm glad to see you again. ";
 	let greetings = savedUser ? `
-		<p class="my-20">Hi ${savedUser}. Please confirm that is You.</p>
-		<p class="my-20">If it's not you tell me your name.</p>
+		<p class="my-20">Hi ${savedUser}. ${comment}</p>
+		<p class="my-20">Please confirm it's you.</p>
+		<p class="my-20">If it's not you, tell me your name.</p>
 		<div class="input-container">
 			<input type="text" id="user-name" value="${savedUser}">
 		</div>
@@ -38,6 +41,11 @@ const renderGreetings = () => {
 	_("greetings").innerHTML = greetings;
 
 	_("save-name").addEventListener('click', saveUserName);
+}
+
+const isVeryLongFromLastGame = (lastGameDate) => {
+	return new Date() - lastGameDate  > 604800000
+
 }
 
 const saveUserName = () => {
@@ -296,11 +304,9 @@ const showHistory = () => {
 }
 
 const renderHistory = () => {
-	let historyFromStorage = getFromLocalStorage('history');
-	let history = historyFromStorage ? JSON.parse(historyFromStorage) : {"history" : []}
 	let historyRecords = '';
 	//console.log(historyFromStorage, history, historyFromStorage.length)
-	let userHistory = history.history.reverse().filter(item => item.userName === userName);
+	let userHistory = getUserHistory(userName);
 	userHistory.forEach(function(historyRecord, index) {
 		historyRecords += generateOneRowForHistory(historyRecord, index);
 	})
@@ -336,6 +342,12 @@ const generateOneRowForHistory = (historyRecord, index) => {
 				<td${ colorClass }>${ calculatePercentageOfCorrectAnswers(historyRecord.points)+'%' }</td>
 				<td>${ new Date(historyRecord.date).toLocaleString() }</td>
 			</tr>`;
+}
+
+const getUserHistory = (userName) => {
+	let historyFromStorage = getFromLocalStorage('history');
+	let history = historyFromStorage ? JSON.parse(historyFromStorage) : {"history" : []}
+	return history.history.reverse().filter(item => item.userName === userName);
 }
 
 const removeHistory = () => {
