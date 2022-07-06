@@ -5,6 +5,7 @@ chosenWords = words;
 answers = [];
 answerCount = 20;
 sessionHistory = [];
+userName = '';
 
 function _(el){
 	return document.getElementById(el);
@@ -16,6 +17,39 @@ const hideElement = (elementId) => {
 
 const showElement = (elementId) => {
 	_(elementId).classList.remove("hide");
+}
+
+const renderGreetings = () => {
+	let savedUser = getFromLocalStorage('userName');
+
+	let greetings = savedUser ? `
+		<p class="my-20">Hi ${savedUser}. Please confirm that is You.</p>
+		<p class="my-20">If it's not you tell me your name.</p>
+		<div class="input-container">
+			<input type="text" id="user-name" value="${savedUser}">
+		</div>
+		<button id="save-name" class="my-20">OK</button>
+	`
+	:	`<p class="my-20">Hello. What's your name?</p>
+		<div class="input-container">
+			<input type="text" id="user-name">
+		</div>
+		<button id="save-name" class="my-20">SAVE</button>`;
+	_("greetings").innerHTML = greetings;
+
+	_("save-name").addEventListener('click', saveUserName);
+}
+
+const saveUserName = () => {
+	userName = _("user-name").value;
+	saveToLocalStorage("userName", userName);
+	closeGreetingsAndInitGame();
+}
+
+const closeGreetingsAndInitGame = () => {
+	hideElement("greetings");
+	showElement("start-navigation");
+	showElement("settings");
 }
 
 const changeLevel = () => {
@@ -205,7 +239,7 @@ const isGoodResult = (points) => {
 
 const addGameInfoToSessionHistory = () => {
 	let points = calculatePoints();
-	sessionHistory.push({"date": new Date(), "level": chosenLevel, "category": chosenCategory, "points": points})
+	sessionHistory.push({"userName": userName, "date": new Date(), "level": chosenLevel, "category": chosenCategory, "points": points})
 }
 
 const showSummaryDetails = () => {
@@ -266,11 +300,11 @@ const renderHistory = () => {
 	let history = historyFromStorage ? JSON.parse(historyFromStorage) : {"history" : []}
 	let historyRecords = '';
 	//console.log(historyFromStorage, history, historyFromStorage.length)
-	history.history.reverse();
-	history.history.forEach(function(historyRecord, index) {
+	let userHistory = history.history.reverse().filter(item => item.userName === userName);
+	userHistory.forEach(function(historyRecord, index) {
 		historyRecords += generateOneRowForHistory(historyRecord, index);
 	})
-	let historyInfo = history.history.length > 0 ? `<table><tr><th>Lp</th><th>Poziom</th><th>Kategoria</th><th>Wynik</th><th>Data</th></tr>
+	let historyInfo = userHistory.length > 0 ? `<table><tr><th>Lp</th><th>Poziom</th><th>Kategoria</th><th>Wynik</th><th>Data</th></tr>
 	${historyRecords}
 	</tr></table>` :
 	'<p class="my-40">Brak wpisów w historii</p>';
@@ -339,6 +373,7 @@ input.addEventListener("keyup", function(event) {
   }
 });
 
+renderGreetings();
 getCategoriesForLevel();
 renderCategorySelect();
 changeLevel();
