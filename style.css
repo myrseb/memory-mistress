@@ -255,6 +255,10 @@ label span {
 	height: 2px;
 }
 
+#greetings {
+	padding: 20px;
+}
+
 #summary-details {
 	position:absolute;
 	width: 900px;
