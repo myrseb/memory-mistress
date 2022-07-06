@@ -3,7 +3,7 @@ categories = [];
 chosenCategory = "Człowiek";
 chosenWords = words;
 answers = [];
-answerCount = 5;
+answerCount = 20;
 sessionHistory = [];
 
 function _(el){
