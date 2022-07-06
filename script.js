@@ -22,7 +22,7 @@ const showElement = (elementId) => {
 const renderGreetings = () => {
 	let savedUser = getFromLocalStorage('userName');
 	let userHistory = getUserHistory(savedUser);
-	let lastGameDate = new Date(userHistory[0].date);
+	let lastGameDate = userHistory.length ? new Date(userHistory[0].date) : new Date();
 	let comment = isVeryLongFromLastGame(lastGameDate) ? "Where have you been for so long? " : "I'm glad to see you again. ";
 	let greetings = savedUser ? `
 		<p class="my-20">Hi ${savedUser}. ${comment}</p>
