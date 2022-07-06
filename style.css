@@ -185,6 +185,10 @@ button:disabled {
 	margin-left: 20px;
 }
 
+.min-height-450 {
+	min-height: 450px;
+}
+
 .mx-20 {
 	margin:auto 20px!important;
 }
